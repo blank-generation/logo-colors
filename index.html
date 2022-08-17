@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./color-thief.min.js"></script>
+    <title>Logo Color Picker</title>
+</head>
+
+<body>
+    <div>
+        <img src="./imgs/brand_logo2.png" alt="" id="img1">
+    </div>
+    <div id="color-display"></div>
+    
+    <style>
+        #img1 {
+            max-width: 300px;
+        }
+
+        #color-display input {
+            height: 60px;
+            width: 60px;
+            margin-right: 10px;
+        }
+
+        #color-display {
+            display: flex;
+        }
+
+        input[type=radio] {
+            display: none;
+            position: absolute;
+        }
+
+        input[type=radio]:checked+label span {
+            transform: scale(1.25);
+        }
+
+        label {
+            display: inline-block;
+            width: 35px;
+            height: 35px;
+            margin-right: 10px;
+            /* cursor: pointer; */
+        }
+
+        label:hover span {
+            transform: scale(1.25);
+        }
+
+        label span {
+            display: block;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.2s ease-in-out;
+        }
+    </style>
+    
+    <script>
+        const img1 = document.getElementById('img1');
+        const cd = document.getElementById('color-display');
+        const colorThief = new ColorThief();
+
+        const rgbToHex = (r, g, b) => '#' + [r, g, b].map(x => {
+            const hex = x.toString(16)
+            return hex.length === 1 ? '0' + hex : hex
+        }).join('');
+
+        img1.addEventListener('load', function () {
+            let swatches = colorThief.getPalette(img1, 5);
+
+            for (let swatch in swatches) {
+                let el = document.createElement('input');
+                el.setAttribute('type', 'radio');
+                el.setAttribute('id', "c" + swatch);
+                let lb = document.createElement('label');
+                lb.setAttribute('for', "c" + swatch);
+                let sp = document.createElement('span');
+                lb.append(sp);
+                console.log(swatches[swatch]);
+                let col =  rgbToHex(swatches[swatch][0], swatches[swatch][1], swatches[swatch][2]);
+                sp.style.background = col;
+                el.setAttribute('value',col );
+                el.setAttribute('name','logoColors');
+                cd.append(el);
+                cd.append(lb);
+            }
+        });
+
+
+    </script>
+</body>
+
+</html>
